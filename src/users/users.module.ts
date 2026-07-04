@@ -5,7 +5,7 @@ import { UsersController } from './users.controller';
 import { User } from './entities/user.entity';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([User])], // <-- Add this
+  imports: [TypeOrmModule.forFeature([User])], // <-- Add this
   controllers: [UsersController],
   providers: [UsersService],
   exports: [UsersService], // <-- Export so AuthModule can use it

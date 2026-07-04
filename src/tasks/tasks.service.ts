@@ -8,7 +8,6 @@ import { GoogleGenerativeAI } from '@google/generative-ai'; // <-- Added Gemini
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Task } from './entities/task.entity';
-import { FirebaseService } from 'src/notifications/firebase/firebase.service';
 
 @Injectable()
 export class TasksService {
@@ -18,7 +17,7 @@ export class TasksService {
     @InjectRepository(Task)
     private tasksRepository: Repository<Task>,
     private configService: ConfigService,
-    private firebaseService: FirebaseService, // <-- Inject Firebase
+    // private firebaseService: FirebaseService, // <-- Inject Firebase
   ) {
     // Initialize Gemini AI
     this.genAI = new GoogleGenerativeAI(
@@ -136,14 +135,14 @@ export class TasksService {
         "It's time to complete your task! Open the app now.";
 
       // Send via Firebase
-      if (userToken) {
-        await this.firebaseService.sendPushNotification(userToken, title, body);
-        console.log(`✅ Sent push notification to ${task.user.email}`);
-      } else {
-        console.log(
-          `⚠️ User ${task.user?.email} has no FCM token. Cannot send push.`,
-        );
-      }
+      // if (userToken) {
+      //   await this.firebaseService.sendPushNotification(userToken, title, body);
+      //   console.log(`✅ Sent push notification to ${task.user.email}`);
+      // } else {
+      //   console.log(
+      //     `⚠️ User ${task.user?.email} has no FCM token. Cannot send push.`,
+      //   );
+      // }
 
       // Mark as notified so it doesn't send again next minute
       task.is_notified = true;

@@ -1,5 +1,5 @@
 import { Controller, Post, Body } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { AuthService, LoginResponse, SignupResponse } from './auth.service';
 import { ApiTags, ApiOperation, ApiBody } from '@nestjs/swagger';
 import { AuthDto } from './dto/auth.dto';
 
@@ -11,8 +11,7 @@ export class AuthController {
   @Post('signup')
   @ApiOperation({ summary: 'Create a new user account' })
   @ApiBody({ type: AuthDto }) // <-- 2. This tells Swagger to show the JSON placeholder!
-  async signup(@Body() body: AuthDto) {
-    // <-- 3. Change "any" to "AuthDto"
+  async signup(@Body() body: AuthDto): Promise<SignupResponse> {
     return this.authService.signup(body.email, body.password);
   }
 
@@ -20,7 +19,7 @@ export class AuthController {
   @Post('login')
   @ApiOperation({ summary: 'Log in to get your JWT access token' })
   @ApiBody({ description: 'User login data', type: AuthDto })
-  async login(@Body() body: AuthDto) {
+  async login(@Body() body: AuthDto): Promise<LoginResponse> {
     return this.authService.login(body.email, body.password);
   }
 }
