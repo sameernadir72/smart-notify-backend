@@ -23,6 +23,7 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": false,
     "noImplicitAny": false,
+    "isolatedModules": true,
     "skipLibCheck": true,
 
     "types": ["node", "jest"]
