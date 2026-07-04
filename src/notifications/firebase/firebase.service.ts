@@ -1,17 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import * as admin from 'firebase-admin';
+import { initializeApp, getApps, cert } from 'firebase-admin/app';
+import { getMessaging } from 'firebase-admin/messaging';
 import * as path from 'path';
 
 @Injectable()
 export class FirebaseService {
   constructor() {
     // We only want to initialize Firebase once!
-    if (!admin.apps.length) {
+    if (!getApps().length) {
       // Safely find the firebase-key.json file in the root of your project
       const keyPath = path.resolve(process.cwd(), 'firebase-key.json');
 
-      admin.initializeApp({
-        credential: admin.credential.cert(require(keyPath)),
+      initializeApp({
+        credential: cert(require(keyPath)),
       });
       console.log('🔥 Firebase Admin SDK Initialized Successfully!');
     }
@@ -29,7 +30,7 @@ export class FirebaseService {
       };
 
       // Send to Firebase!
-      const response = await admin.messaging().send(message);
+      const response = await getMessaging().send(message);
       console.log('✅ Successfully sent push notification:', response);
       return response;
     } catch (error) {
