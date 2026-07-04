@@ -25,6 +25,6 @@
     "noImplicitAny": false,
     "skipLibCheck": true,
 
-    "types": ["node"]
+    "types": ["node", "jest"]
   }
 }
