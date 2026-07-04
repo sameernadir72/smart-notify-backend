@@ -49,7 +49,7 @@ export class TasksController {
       ...this.tasksService.update(id, updateTaskDto),
       id,
       updateTaskDto,
-    } ;
+    };
   }
 
   @Delete(':id')

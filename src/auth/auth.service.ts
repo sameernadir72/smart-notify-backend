@@ -1,10 +1,23 @@
-import { Injectable, BadRequestException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { User } from '../users/entities/user.entity';
+// Define the shapes of your responses
+export interface SignupResponse {
+  id: string;
+  email: string;
+  message: string;
+}
 
+export interface LoginResponse {
+  access_token: string;
+}
 @Injectable()
 export class AuthService {
   constructor(
@@ -13,8 +26,10 @@ export class AuthService {
     private jwtService: JwtService, // <--- Add JWT Service
   ) {}
 
-  async signup(email: string, pass: string): Promise<any> {
-    const existingUser = await this.usersRepository.findOne({ where: { email } });
+  async signup(email: string, pass: string): Promise<SignupResponse> {
+    const existingUser = await this.usersRepository.findOne({
+      where: { email },
+    });
     if (existingUser) {
       throw new BadRequestException('User with this email already exists');
     }
@@ -29,11 +44,15 @@ export class AuthService {
 
     const savedUser = await this.usersRepository.save(newUser);
 
-    return { id: savedUser.id, email: savedUser.email, message: 'User created successfully' };
+    return {
+      id: savedUser.id,
+      email: savedUser.email,
+      message: 'User created successfully',
+    };
   }
 
   // --- NEW LOGIN METHOD ---
-  async login(email: string, pass: string): Promise<any> {
+  async login(email: string, pass: string): Promise<LoginResponse> {
     // 1. Find user by email
     const user = await this.usersRepository.findOne({ where: { email } });
     if (!user) {
