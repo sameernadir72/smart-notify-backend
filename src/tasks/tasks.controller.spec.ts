@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { TasksController } from './tasks.controller';
 import { TasksService } from './tasks.service';
 import { Task } from './entities/task.entity'; // adjust path/name if different
+import { FirebaseService } from '../notifications/firebase/firebase.service';
 
 describe('TasksController', () => {
   let controller: TasksController;
@@ -27,6 +28,12 @@ describe('TasksController', () => {
           provide: ConfigService,
           useValue: {
             get: jest.fn(),
+          },
+        },
+        {
+          provide: FirebaseService,
+          useValue: {
+            sendPushNotification: jest.fn(),
           },
         },
       ],

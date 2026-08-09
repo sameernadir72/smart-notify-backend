@@ -1,7 +1,20 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Body,
+  Param,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateFcmTokenDto } from './dto/update-fcm-token.dto';
 
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -14,6 +27,17 @@ export class UsersController {
   @Get()
   findAll() {
     return this.usersService.findAll();
+  }
+
+  @Patch('fcm-token')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  updateFcmToken(@Body() updateFcmTokenDto: UpdateFcmTokenDto, @Request() req) {
+    const secureUserId = req.user?.id;
+    return this.usersService.updateFcmToken(
+      secureUserId,
+      updateFcmTokenDto.fcm_token,
+    );
   }
 
   @Get(':id')

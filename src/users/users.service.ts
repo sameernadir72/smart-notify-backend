@@ -27,4 +27,9 @@ export class UsersService {
       where: { id },
     });
   }
+
+  async updateFcmToken(id: string, fcm_token: string) {
+    await this.usersRepository.update({ id }, { fcm_token });
+    return this.findOne(id);
+  }
 }

@@ -3,6 +3,7 @@ import { TasksService } from './tasks.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Task } from './entities/task.entity';
+import { FirebaseService } from '../notifications/firebase/firebase.service';
 
 describe('TasksService', () => {
   let service: TasksService;
@@ -19,6 +20,12 @@ describe('TasksService', () => {
           provide: ConfigService,
           useValue: {
             get: jest.fn(),
+          },
+        },
+        {
+          provide: FirebaseService,
+          useValue: {
+            sendPushNotification: jest.fn(),
           },
         },
       ],
